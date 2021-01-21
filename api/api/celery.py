@@ -1,4 +1,5 @@
 from celery import Celery
+from celery.schedules import crontab
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
 app = Celery('api')
@@ -8,7 +9,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
     'send-email-every-20': {
         'task': 'notification.tasks.send_mail',
-        'schedule': 20
+        'schedule': crontab(minute='*/1/')
     }
 }
 
